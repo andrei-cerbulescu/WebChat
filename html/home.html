@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>WebChat</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        .scrollbar {
+            height: 360px;
+            width: 480px;
+            overflow: auto;
+        }
+
+        .textBox {
+            position: fixed;
+        }
+    </style>
+</head>
+
+<body onload="awaitMessages()">
+
+    <div class="textBox">
+        <div class="scrollbar" id="chatBox">
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+            <h1>aaa</h1>
+        </div>
+
+        <form action="/sendMessage" method="post" autocomplete="off">
+            <input type="text" name="currentMessage" id="currentMessage" class="form-control">
+            <button type="button" onclick="deleteCurrentMessage()">Send</button>
+            <br>
+            <div>Username: <input type="text" name="username" id="username" class="form-control"></div>
+        </form>
+
+    </div>
+
+</body>
+
+<script>
+    function deleteCurrentMessage() {
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+
+                document.getElementById("currentMessage").value = "";
+
+            }
+        };
+        xhttp.open("POST", "/sendMessage", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("username=" + document.getElementById('username').value + "&currentMessage=" + document.getElementById('currentMessage').value);
+
+
+    }
+
+    function awaitMessages() {
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+                awaitMessages();
+            }
+
+        }
+
+        xhttp.open("GET", "/getMessage", true);
+        xhttp.send();
+
+    }
+
+</script>
+
+</html>
