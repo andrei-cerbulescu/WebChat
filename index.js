@@ -22,12 +22,11 @@ app.get('/', (req, res) => {
 
 app.post('/sendMessage', (req, res) => {
 
-    var message = {username: req.body.username, currentMessage: req.body.currentMessage}
+    var message = { username: req.body.username, currentMessage: req.body.currentMessage }
 
     myEmitter.emit('newMessage', message)
-    res.sendStatus(200)
 
-    res.end()
+    res.sendStatus(200)
 
 })
 
@@ -35,8 +34,11 @@ app.get('/getMessage', (req, res) => {
 
     myEmitter.on('newMessage', (bodyRes) => {
 
-        res.json({username: bodyRes.username, currentMessage: bodyRes.currentMessage})
+        if (!res.headersSent) {
 
+            res.json({ username: bodyRes.username, currentMessage: bodyRes.currentMessage })
+
+        }
     })
 
 })

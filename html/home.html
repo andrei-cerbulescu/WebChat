@@ -23,28 +23,10 @@
 
     <div class="textBox">
         <div class="scrollbar" id="chatBox">
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
-            <h1>aaa</h1>
+            <div>
+                
+            </div>
+            
         </div>
 
         <form action="/sendMessage" method="post" autocomplete="off">
@@ -83,12 +65,19 @@
 
             if (this.readyState == 4 && this.status == 200) {
                 console.log(this.responseText);
-                awaitMessages();
+
+                jsonResponse = JSON.parse(this.responseText)
+
+                var newHTML = "<div><p>"+jsonResponse.username+": "+jsonResponse.currentMessage+"</p></div>"
+
+                document.getElementById('chatBox').innerHTML = document.getElementById('chatBox').innerHTML + newHTML
+
+                awaitMessages()
             }
 
         }
 
-        xhttp.open("GET", "/getMessage", true);
+        xhttp.open("GET", "/getMessage");
         xhttp.send();
 
     }
