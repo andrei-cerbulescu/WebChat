@@ -6,6 +6,9 @@ const events = require('events');
 const app = express()
 const port = 25565
 
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
 const myEmitter = new events.EventEmitter();
 
 app.use(bodyParser.json());
@@ -13,6 +16,8 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(session({ secret: 'ssshhhhh' }));
+
+var responsesAwaitingMessage = []
 
 app.get('/', (req, res) => {
 
@@ -30,21 +35,14 @@ app.post('/sendMessage', (req, res) => {
 
 })
 
-app.get('/getMessage', (req, res) => {
+myEmitter.on('newMessage', (currentMessage) => {
 
-    myEmitter.on('newMessage', (bodyRes) => {
-
-        if (!res.headersSent) {
-
-            res.json({ username: bodyRes.username, currentMessage: bodyRes.currentMessage })
-
-        }
-    })
-
+    if (currentMessage.username != '' && currentMessage.currentMessage != '') {
+        io.emit('newMessageForYou', currentMessage)
+    }
 })
 
 
-
-app.listen(port, () => {
+http.listen(port, () => {
     console.log("App Started!")
 })

@@ -24,9 +24,9 @@
     <div class="textBox">
         <div class="scrollbar" id="chatBox">
             <div>
-                
+
             </div>
-            
+
         </div>
 
         <form action="/sendMessage" method="post" autocomplete="off">
@@ -40,7 +40,12 @@
 
 </body>
 
+<script src="/socket.io/socket.io.js"></script>
+
 <script>
+
+    var socket = io();
+
     function deleteCurrentMessage() {
 
         var xhttp = new XMLHttpRequest();
@@ -58,29 +63,17 @@
 
     }
 
-    function awaitMessages() {
+    socket.on('newMessageForYou', function (newMessage) {
 
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
+        var newHTML = "<div><p>" + newMessage.username + ": " + newMessage.currentMessage + "</p></div>"
 
-            if (this.readyState == 4 && this.status == 200) {
-                console.log(this.responseText);
+        document.getElementById('chatBox').innerHTML = document.getElementById('chatBox').innerHTML + newHTML
 
-                jsonResponse = JSON.parse(this.responseText)
+        var currentDiv = document.getElementById("chatBox");
+        currentDiv.scrollTop = currentDiv.scrollHeight;
 
-                var newHTML = "<div><p>"+jsonResponse.username+": "+jsonResponse.currentMessage+"</p></div>"
+    })
 
-                document.getElementById('chatBox').innerHTML = document.getElementById('chatBox').innerHTML + newHTML
-
-                awaitMessages()
-            }
-
-        }
-
-        xhttp.open("GET", "/getMessage");
-        xhttp.send();
-
-    }
 
 </script>
 
